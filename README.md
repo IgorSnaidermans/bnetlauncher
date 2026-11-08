@@ -1,196 +1,184 @@
 # bnetlauncher
 
-Launcher utility to help start battle.net games with the steam overlay.
-
 [![Build](https://github.com/IgorSnaidermans/bnetlauncher/actions/workflows/bnetlauncher-build.yaml/badge.svg)](https://github.com/IgorSnaidermans/bnetlauncher/actions/workflows/bnetlauncher-build.yaml)
 [![Latest release](https://img.shields.io/github/v/release/IgorSnaidermans/bnetlauncher?include_prereleases)](https://github.com/IgorSnaidermans/bnetlauncher/releases/latest)
 
-## This fork
+Start Battle.net games from Steam with the Steam overlay, already logged in and with little or no
+interaction with the Battle.net client.
 
-This is a maintained fork of [dafzor/bnetlauncher](https://github.com/dafzor/bnetlauncher), whose author
-has put the original into maintenance mode and no longer plays Blizzard games. This fork keeps picking up
-new game/product codes and fixing bugs as they come up.
+This is a maintained fork of [dafzor/bnetlauncher](https://github.com/dafzor/bnetlauncher), which is in
+maintenance mode. It adds new games, bug fixes and a setup app.
 
-* **Download the latest build:** [Releases](https://github.com/IgorSnaidermans/bnetlauncher/releases)
-* **Found a bug or need a game added:** [open an issue](https://github.com/IgorSnaidermans/bnetlauncher/issues)
-* Upstream PRs are also opened when it makes sense, in case the original maintainer wants to merge them back.
+## Getting started
 
-Official page of the original project: http://madalien.com/stuff/bnetlauncher/
+You need Windows 7 SP1 or newer and [.NET Framework 4.7.2](https://www.microsoft.com/net/download/dotnet-framework-runtime),
+which is already included in Windows 10 version 1803 and newer.
 
-## Purpose
+### With the setup app
 
-This application is intended to facilitate the launch of battle.net games from steam with overlay
-with minimal/no interaction with the battle.net client while still being automatically logged in.
+1. Download `bnetlauncher.exe` and `bnetlauncher-setup.exe` from the
+   [latest release](https://github.com/IgorSnaidermans/bnetlauncher/releases) into the same folder.
+2. Run `bnetlauncher-setup.exe`.
+3. Tick your games, choose where `bnetlauncher.exe` should go and which Steam accounts get the shortcuts.
+4. Click **Install**. Steam has to be closed while the shortcuts are written, and the setup offers to close it for you.
+5. Start Steam. The games are in your library as non-Steam shortcuts.
 
-## Requirements
+Running it again updates existing shortcuts instead of duplicating them. Before changing anything, the setup
+saves your current shortcuts as `shortcuts.vdf.bnetlauncher-setup.bak` next to the original in
+`<Steam>\userdata\<account id>\config\`.
 
-* Windows 7 SP1 or above (Only tested on current release of Windows 10)
-* .Net Framework 4.7.2 (included in Windows 10 April 2018 Update [Version 1803] or above).
-  Download link: https://www.microsoft.com/net/download/dotnet-framework-runtime
+The setup app only lists Battle.net games. Add Epic Games Store titles manually.
 
-## Howto Use
+### Manually
 
-1. Extract the included exe to any location you want (ex: steam folder)
-2. Add the exe to steam as a non-steam game shortcut
-3. On the shortcut properties add one of the following parameters:
+1. Put `bnetlauncher.exe` anywhere you like, such as your Steam folder.
+2. Add it to Steam as a non-Steam game.
+3. In the shortcut's properties, set the launch options to a code from the [list below](#supported-games).
 
-| code          | game                                                  |
-| ------------- | ----------------------------------------------------- |
-|codbo4         | Call of Duty: Black Ops 4                             |
-|codbocw        | Call of Duty: Black Ops Cold War                      |
-|codmw2019      | Call of Duty: Modern Warfare (2019)                   |
-|codmw2crm      | Call of Duty: Modern Warfare 2 Campaign Remastered    |
-|codmw2         | Call of Duty: Modern Warfare 2 + Warzone 2            |
-|codhq          | Call of Duty HQ (MW3 2023 and up)                     |
-|cb4            | Crash Bandicoot 4: It's About Time                    |
-|d2r            | Diablo 2: Resurrected                                 |
-|d3             | Diablo 3                                              |
-|d3ptr          | Diablo 3 Public Test Realm                            |
-|d4             | Diablo IV                                             |
-|di             | Diablo Immortal                                       |
-|hs             | Heartstone                                            |
-|hots           | Heroes of the Storm                                   |
-|ow             | Overwatch                                             |
-|owptr          | Overwatch Public Test Realm                           |
-|scr            | Starcraft Remastered                                  |
-|sc2            | Starcraft 2                                           |
-|w1r            | Warfraft I: Remastered                                |
-|w2r            | Warfraft II: Remastered                               |
-|w3             | Warcraft 3: Reforged                                  |
-|wow            | World of Warcraft                                     |
-|wowclassic     | World of Warcraft Classic                             |
-|wowclassicera  | World of Warcraft Classic Era                         |
-|wowclassictitan| World of Warcraft Titan Reforged Classic              |
-|wow_anniversary| World of Warcraft Burning Crusade Anniversary         |
-|wowclassicbeta | World of Warcraft Classic Beta                        |
-|wowforever     | World of Warcraft: Forever                            |
-|wowptr         | World of Warcraft Public Test Realm                   |
+The shortcut's target and launch options end up looking like `"G:\Steam\bnetlauncher.exe" ow`.
 
-the result should look something like the example or screenshot bellow:
+## Supported games
 
-`"G:\Steam\bnetlauncher.exe" ow`
+### Battle.net
 
-![Example Screenshot](https://madalien.com/media/uploads/2018/10/steam_parameters_bnetlauncher.png)
+| Code | Game |
+| --- | --- |
+| `cb4` | Crash Bandicoot 4: It's About Time |
+| `codbo4` | Call of Duty: Black Ops 4 |
+| `codbocw` | Call of Duty: Black Ops Cold War |
+| `codhq` | Call of Duty HQ (MW3 2023 and newer) |
+| `codmw2` | Call of Duty: Modern Warfare II + Warzone 2.0 |
+| `codmw2019` | Call of Duty: Modern Warfare (2019) |
+| `codmw2cr` | Call of Duty: Modern Warfare 2 Campaign Remastered |
+| `codvg` | Call of Duty: Vanguard |
+| `d2r` | Diablo 2: Resurrected |
+| `d3` | Diablo 3 |
+| `d3ptr` | Diablo 3 Public Test Realm |
+| `d4` | Diablo 4 |
+| `di` | Diablo Immortal |
+| `hots` | Heroes of the Storm |
+| `hotsptr` | Heroes of the Storm Public Test Realm |
+| `hs` | Hearthstone |
+| `ow` | Overwatch |
+| `owptr` | Overwatch Public Test Realm |
+| `sc2` | Starcraft 2 |
+| `scr` | Starcraft Remastered |
+| `w1r` | Warcraft I: Remastered |
+| `w2r` | Warcraft II: Remastered |
+| `w3` | Warcraft 3: Reforged |
+| `wow` | World of Warcraft |
+| `wow_anniversary` | World of Warcraft Burning Crusade Anniversary |
+| `wowclassic` | World of Warcraft Classic |
+| `wowclassicbeta` | World of Warcraft Classic Beta |
+| `wowclassicera` | World of Warcraft Classic Era |
+| `wowclassictitan` | World of Warcraft Titan Reforged Classic |
+| `wowforever` | World of Warcraft: Forever |
+| `wowptr` | World of Warcraft Public Test Realm |
 
-Note: bnetlauncher default behavior is to retain the state of the client, so if the client is
-not running bnetlauncher will close it, if it's running it will leave it running.
+### Epic Games Store
 
-## Public Test Realm and World of Warcraft Classic
+| Code | Game |
+| --- | --- |
+| `dauntless` | Dauntless |
+| `ebatmanarkknight` | Batman Arkham Knight |
+| `ebl3` | Borderlands 3 |
+| `egta5` | GTA V |
+| `esubnautica` | Subnautica |
+| `etalosprincipal` | Talos Principal |
+| `ewwz` | World War Z |
 
-With the release of the the new client in 2021 the previous methods to launch PTR and Classic version no longer work.
-This version includes experimental fix for the issue that may not always work. If game doesn't launch automaticall
-manual interaction to press the play button will be required.
+## Launch options
+
+Add these after the game code.
+
+| Option | What it does |
+| --- | --- |
+| `--timeout <seconds>`, `-t <seconds>` | How long to look for the game before showing an error. The default is 15. |
+| `--notask`, `-n` | Start the client directly instead of through Task Scheduler. Steam then applies the overlay to the client and shows you as playing until the client exits. |
+| `--leaveopen`, `-l` | Leave the client open after launching the game. |
+
+By default bnetlauncher keeps the client as it found it: if the client wasn't running, it's closed again afterwards.
 
 ## Troubleshooting
 
-In case of problems logging can be enabled by creating a enablelog.txt file inside `%localappdata%\madalien.com\bnetlauncher\`,
-you can open the location by pasting the path into explorer or the run dialog in windows (WinKey+R)
+To turn on logging, create an empty `enablelog.txt` in `%localappdata%\madalien.com\bnetlauncher\`.
+Logs aren't cleaned up automatically, so remove the file when you're done.
 
-## Known Issues
+If the setup app can't find Steam or Battle.net, run `bnetlauncher-setup.exe --diag` from a terminal. It prints what
+was detected and changes nothing. Include the output and the setup's saved log when you
+[open an issue](https://github.com/IgorSnaidermans/bnetlauncher/issues).
 
-* Launching WoW Classic and PTR version of game was dependant on enter key press defaulting to play button.
-  As of latest client version, this is no longer the case, there's experimental code to work around it but
-  it may not always work, if the game doesn't launch pressing the play key will be required.
-* Slow computers might take too long causing to bnetlauncher to think something went wrong, see additional options
-  on how to use --timeout to fix it.
-* Enabling multiple instances of battle.net client in it's options might break bnetlauncher functionality.
-* Users of MSI Afterburner, Fraps and other overlay software might experience crashes do to incompatibility
-  with their own overlay and steam's, to solve the issue disable the 3rd party application overlay.
-* The game, bnetlauncher and steam must all have the same running permissions to work properly, this means if
-  one of them is running has Administrator/Elevated Permissions, then all of them must also be run has
-  Administrator/Elevated Permissions.
-* It's not possible to automatically launch games with a specific region set. The client provides no direct
-  option to do this, however a workaround can be done by creating a new game entry and the nolaunch option and
-  manually selecting the region before clicking play.
-* Battle.net client "ads" will interfere with the PTR and WoW Classic wow launch, when it happens user will
-  need to press the play button manually to continue the game launch.
-* Default launching the client trough a scheduled task may be incompatible with some setups, workaround is
-  provided with `--notask` switch/option.
-* Starting multiple copies of Starcraft Remastered may cause bnetlauncher to show an error since the game only allows
-  one instance to be run at the same time.
-* There's no built in routine to clean up the log files if they pile up (logging is disabled by default)
-* Call of Duty: Cold War might work better when using `--timeout 10` for some users.
+Known issues:
 
-## Additional options
+- **Classic and PTR versions need a click sometimes.** Games on the `battlenet2` client are started by pressing the
+  Play button automatically. If that fails, or a Battle.net ad gets in the way, press Play yourself.
+- **The game isn't found in time.** Slow PCs may need a longer `--timeout`. Some Call of Duty: Cold War players do better with `--timeout 10`.
+- **Permissions must match.** The game, bnetlauncher and Steam must all run elevated, or none of them.
+- **Other overlays can crash the game.** Disable overlays such as MSI Afterburner or Fraps.
+- **Multiple client instances can break launching.** Turn off that option in Battle.net.
+- **Scheduled task problems.** If launching through Task Scheduler doesn't work on your setup, use `--notask`.
+- **No region selection.** Create a custom entry with the `nolaunch` option and pick the region yourself before clicking Play.
+- **Starcraft Remastered only allows one instance,** so starting a second copy may show an error.
 
-There's also the following additional options provided by command line switches:
+## Adding your own games
 
-* `--timeout <seconds>, -t <seconds>` changes how many seconds it tries to look for the game before giving an error (15 seconds by default).
-* `--notask, -n` starts the launcher directly instead of using task scheduler (starting the client directly will cause steam to apply the overlay
-  to the client and consider you playing the game until the client exists)
-* `--leaveopen, -l` leaves the client open after launcher the game. Warning: If combined with `--notask` option it will show you as playing on steam until
-  you close the client.
+bnetlauncher reads extra entries from a `gamesdb.ini` placed next to `bnetlauncher.exe` or in
+`%localappdata%\madalien.com\bnetlauncher\`. The `gamesdb.ini.example` in each release is a copy of the built-in list.
+Built-in entries always win, so use a new section name for anything you customize.
+
+```ini
+[codbo4]
+name=Call of Duty: Black Ops 4
+client=battlenet
+cmd=VIPR
+exe=BlackOps4.exe
+options=noargs,waitforexit
+```
+
+| Key | Meaning |
+| --- | --- |
+| `[section]` | The code you pass to bnetlauncher. |
+| `name` | Friendly name for messages. |
+| `client` | `battlenet`, `battlenet2` or `epic`. `battlenet2` can launch PTR and Classic versions but can be less reliable. |
+| `cmd` | The case-sensitive launch ID, which depends on the client (see below). |
+| `exe` | The game executable to look for. `%` is a wildcard, as in `Diablo III%.exe`. |
+| `options` | Comma-separated options (see below). |
+
+Where to find `cmd`:
+
+- **`battlenet`:** in `%LOCALAPPDATA%\Battle.net\Logs\battle.net*.log`.
+- **`battlenet2`:** the product code, in `C:\ProgramData\Battle.net\Setup\<game>\*.log`.
+- **`epic`:** create a desktop shortcut in the Epic launcher and copy the ID from its URL, `com.epicgames.launcher://apps/<id>?action=launch&silent=true`.
+
+Options:
+
+- `noargs`: don't fail when the game's arguments come back blank (needed for Black Ops 4).
+- `waitforexit`: keep bnetlauncher open until the game exits.
+- `nolaunch`: only open the client and look for the game for an extra 60 seconds, so you can start it yourself.
+- `notask`: don't start the client through Task Scheduler.
+- `noadmin`: try to avoid the UAC prompt with compatibility flags. This is an untested hack that can break the game.
 
 ## Uninstalling
 
-To remove all traces of bnetlauncher from your system:
+1. Remove the shortcuts from your Steam library and delete `bnetlauncher.exe`.
+2. Open `taskschd.msc` and delete the `bnetlauncher` folder from the Task Scheduler Library.
+3. Delete `%localappdata%\madalien.com\bnetlauncher\`.
 
-* Search for 'taskschd.msc' in the start menu and open it, expand library and delete bnetlauncher folder to remove the tasks used to start the clients
-* Search for `%localappdata%\madalien.com` in start menu and open the folder, delete bnetlauncher folder to remove any created logs and gamedb.ini files
+## Building
 
-## Advanced: Adding new games or custom cases
-
-From v2.00 onward bnetlauncher uses a internal gamedb.ini to control how games are launched.
-
-**Disclaimer:** This option is there to make it easier to add new games or
-support "exotic" use cases. It's not intended or needed for regular users.
-
-To customize the configurations create a gamedb.ini file in:
-
-* `%localappdata%\madalien.com\bnetlauncher\gamedb.ini`
-* the directory where the bnetlauncher executable is located.
-
-A `gamesdb.ini.sample` is distributed with bnetlauncher containing a copy of the built in configuration.
-
-**Important:** The defaults entries are not changeable. bnetlauncher will always override any changed value with it's internal gamesdb.
-However it is possible to create a new entry using a different name to use custom options.
-
-Example entry:
+Open `bnetlauncher.sln` in Visual Studio, or run:
 
 ```
-  [codbo4]
-  name=Call of Duty: Black Ops 4
-  client=battlenet
-  cmd=VIPR
-  exe=BlackOps4.exe
-  options=noargs,waitforexit
+nuget restore bnetlauncher.sln
+msbuild bnetlauncher.sln /p:Configuration=Release
 ```
-Explaining what each part does:
 
-* `[codbo4]`  name used with bnetlauncher that identifies the settings to use (ex: `bnetlauncher.exe codbo4`)
-* `name=Call of Duty: Black Ops 4` a friendly name for the game used for error and help messages
-* `client=battlenet` the client module used to launch the game, currently there's battlenet, battlenet2 and epic,
-   difference between the two battlenet is that battlenet2 can launch ptr/classic version of games but could be less reliable then battlenet.
-* `cmd=VIPR` command to launch the game, for the battlenet it's a special id that allows direct launching of the game, be aware that this value is
-  case sensitive! With battlenet2 it's the game's productCode. Those values can be discovered by looking at logs in different locations:
-  * for battlenet `'%LOCALAPPDATA%\Battle.net\Logs\battle.net*.log'`
-  * for battlenet2 `'C:\ProgramData\Battle.net\Setup\<game>\*.log'`
-  * for epic, create a desktop shortcut (on launcher manage on tree dot menu then create shortcut) and extract the id from the URL field in the created shortcut properties, it will be something like: `com.epicgames.launcher://apps/<id will be here>?action=launch&silent=true`
-* `exe=BlackOps4.exe` game exe that bnetlauncher will look for after launch, can use `%` as a wildcard ie `Diablo III%.exe`
-    to support 32 and 64 bit builds of the game.
-* `options=noargs,waitforexit` list of comma separated options, currently supported:
-  * `noargs` doesn't throw an error when retrieving blank arguments from the game (needed for blackops4.exe)
-  * `waitforexit` leave bnetlauncher open and waiting until the game existing (needed for destiny 2 to show you as playing)
-  * `nolaunch` don't directly launch the game but just open the client and try to find the game for an additional 60s. This can be
-    used launch a game and give time to select a region or other unsupported options.
-  * `notask` doesn't start the client trough a scheduled task, this will make the steam overlay also apply to the battle.net client
-  * `noadmin` tries to apply compatibility flags to the game to avoid calling the UAC, this is an untested hack that can break the game
-  **do not use unless you know what you're doing**.
+Pushing a `v*` tag builds and publishes a GitHub release. Tags containing a hyphen, such as `v2.26-forever.2`, are published as pre-releases.
 
-## Contributors
+## Credits
 
-* internet coder Maruf for ghost tray icon fix code
-* github Ethan-BB for the new parameters to launch games on battle.net
-* github RobFreiburger and iMintty for Starcraft Remastered and Destiny 2 support respectively.
-* /u/fivetwofoureight for creating and allowing me to use his icon.
-* /u/malecden, Maverick, /u/sumphatguy and others for their help pointing out bugs.
-* github jbzdarkid for fixing some typos in the documentation.
-* github jacobmix for crash bandicoot 4 addition
-* github KyleStilkey for Diablo Immortal support
-* github d3rt0xx for MW2 & WZ2.0 support
-* github Sectimus for Diablo IV support
-* github Sectimus for WoW Classic Era support
-* github LazymanOnGithub for MW3 2023 support
-* github Aqvilinus for Warcraft I/II remastered support
-* github magnww for World of Warcraft Titan Reforged Classic support
-* github AdamsGH for World of Warcraft Burning Crusade Anniversary and optimizations
+bnetlauncher was created by [dafzor](https://github.com/dafzor). Thanks also to Maruf (ghost tray icon fix),
+/u/fivetwofoureight (icon), /u/malecden, Maverick, /u/sumphatguy and these GitHub contributors: Ethan-BB, RobFreiburger,
+iMintty, jbzdarkid, jacobmix, KyleStilkey, d3rt0xx, Sectimus, LazymanOnGithub, Aqvilinus, magnww and AdamsGH.
+
+Licensed under the GPLv3. See [license.txt](license.txt).
