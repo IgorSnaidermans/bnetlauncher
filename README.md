@@ -25,7 +25,12 @@ which is already included in Windows 10 version 1803 and newer.
    Desktop shortcuts don't involve Steam at all.
 6. Start your game from the desktop, or start Steam and find it in your library as a non-Steam shortcut.
 
-Steam is optional, but the Steam overlay only works when the game is started from a Steam shortcut.
+![The setup app with Steam and Desktop shortcuts selected](docs/setup-app.png)
+
+Steam is optional, but the Steam overlay only works when the game is started from a Steam shortcut. On a PC without
+Steam, the setup app creates desktop shortcuts only:
+
+![The setup app on a PC without Steam, after creating desktop shortcuts](docs/setup-app-desktop.png)
 
 Running it again updates existing shortcuts instead of duplicating them. Before changing Steam's shortcuts, the setup
 saves them as `shortcuts.vdf.bnetlauncher-setup.bak` next to the original in `<Steam>\userdata\<account id>\config\`.
