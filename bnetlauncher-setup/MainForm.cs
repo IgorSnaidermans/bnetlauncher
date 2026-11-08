@@ -25,6 +25,8 @@ namespace bnetlauncher_setup
         private readonly Button _browseFolderButton = new Button();
         private readonly TextBox _sourceExeBox = new TextBox();
         private readonly Button _browseExeButton = new Button();
+        private readonly CheckBox _steamCheck = new CheckBox();
+        private readonly CheckBox _desktopCheck = new CheckBox();
         private readonly CheckedListBox _accountsList = new CheckedListBox();
         private readonly Label _accountsHint = new Label();
         private readonly Button _installButton = new Button();
@@ -41,6 +43,7 @@ namespace bnetlauncher_setup
         private readonly string _steamInstallPath;
         private readonly List<SteamAccount> _accounts;
         private readonly string _battleNetInstallPath;
+        private readonly string _desktopFolder = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
         public MainForm()
         {
@@ -99,8 +102,8 @@ namespace bnetlauncher_setup
 
             var intro = new Label
             {
-                Text = "Pick the games you want to add to Steam with overlay support, where to put " +
-                       "bnetlauncher.exe, and which Steam account(s) to add them to.",
+                Text = "Pick your games, where to put bnetlauncher.exe, and where to create shortcuts. " +
+                       "The Steam overlay only works with Steam shortcuts.",
                 AutoSize = true,
                 Dock = DockStyle.Top,
                 Margin = new Padding(0, 0, 0, 8),
@@ -201,7 +204,7 @@ namespace bnetlauncher_setup
 
             var accountsGroup = new GroupBox
             {
-                Text = "Add to Steam account(s)",
+                Text = "Create shortcuts",
                 Dock = DockStyle.Top,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -213,22 +216,32 @@ namespace bnetlauncher_setup
                 Dock = DockStyle.Fill,
                 AutoSize = true,
                 AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                RowCount = 2,
+                RowCount = 4,
                 ColumnCount = 1,
             };
             accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            _steamCheck.Text = "Steam, for these accounts:";
+            _steamCheck.AutoSize = true;
+            _steamCheck.CheckedChanged += (s, e) => _accountsList.Enabled = _steamCheck.Checked;
+            accountsPanel.Controls.Add(_steamCheck, 0, 0);
             _accountsHint.Dock = DockStyle.Top;
             _accountsHint.AutoSize = true;
             _accountsHint.ForeColor = Color.DarkRed;
-            accountsPanel.Controls.Add(_accountsHint, 0, 0);
+            accountsPanel.Controls.Add(_accountsHint, 0, 1);
             // Fixed, compact height (enough for ~3 accounts) instead of filling the column - most
             // people only have one or two Steam accounts on a PC, so a huge mostly-empty box was
             // just wasted space.
             _accountsList.Dock = DockStyle.Top;
             _accountsList.Height = 78;
             _accountsList.CheckOnClick = true;
-            accountsPanel.Controls.Add(_accountsList, 0, 1);
+            accountsPanel.Controls.Add(_accountsList, 0, 2);
+            _desktopCheck.Text = "Desktop";
+            _desktopCheck.AutoSize = true;
+            _desktopCheck.Margin = new Padding(3, 6, 3, 0);
+            accountsPanel.Controls.Add(_desktopCheck, 0, 3);
             accountsGroup.Controls.Add(accountsPanel);
             column.Controls.Add(accountsGroup, 0, 2);
 
@@ -374,12 +387,14 @@ namespace bnetlauncher_setup
         {
             if (_accounts.Count == 0)
             {
-                _accountsHint.Text = "No Steam accounts were detected on this PC. bnetlauncher.exe will still be " +
-                                      "installed, but you'll need to add the Steam shortcut yourself.";
+                _accountsHint.Text = "No Steam accounts were detected on this PC.";
                 _accountsList.Enabled = false;
+                _steamCheck.Enabled = false;
+                _desktopCheck.Checked = true;
                 return;
             }
 
+            _steamCheck.Checked = true;
             _accountsHint.Text = string.Empty;
             foreach (var a in _accounts)
             {
@@ -477,45 +492,47 @@ namespace bnetlauncher_setup
                 return;
             }
 
-            var selectedAccounts = _accountsList.Enabled
+            var selectedAccounts = _steamCheck.Checked
                 ? _accountsList.CheckedItems.Cast<SteamAccount>().ToList()
                 : new List<SteamAccount>();
+            var addToDesktop = _desktopCheck.Checked;
 
-            if (selectedAccounts.Count == 0)
+            if (selectedAccounts.Count == 0 && !addToDesktop)
             {
-                Log("No Steam account selected, so no Steam shortcuts were added.");
-                SetStatus("bnetlauncher.exe installed. No Steam shortcut added (no account selected).", isError: false);
+                Log("No shortcut destination selected, so no shortcuts were added.");
+                SetStatus("bnetlauncher.exe installed. No shortcuts added (no destination selected).", isError: false);
                 return;
-            }
-
-            if (SteamLocator.IsSteamRunning())
-            {
-                var result = MessageBox.Show(this,
-                    "Steam is currently running. It needs to be closed while shortcuts are added, otherwise it " +
-                    "will overwrite these changes when it exits.\n\nClose Steam now?",
-                    "Steam is running", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes)
-                {
-                    Log("Closing Steam...");
-                    SteamLocator.RequestSteamShutdown(_steamInstallPath);
-                    WaitForSteamToExit();
-                }
-
-                // Steam rewrites shortcuts.vdf when it exits, so anything written now would be lost.
-                if (SteamLocator.IsSteamRunning())
-                {
-                    const string message = "bnetlauncher.exe installed, but no Steam shortcuts were added because " +
-                                           "Steam is still running. Close Steam and click Install again.";
-                    Log(message);
-                    SetStatus(message, isError: false);
-                    return;
-                }
             }
 
             var added = 0;
             var updated = 0;
             var failed = 0;
+
+            if (addToDesktop)
+            {
+                foreach (var game in selectedGames)
+                {
+                    try
+                    {
+                        var wasAdded = DesktopShortcuts.AddOrUpdate(_desktopFolder, game.Name, targetExe, targetFolder, game.Id);
+
+                        if (wasAdded) added++; else updated++;
+                        Log($"[Desktop] {(wasAdded ? "Added" : "Updated")} shortcut for '{game.Name}' ({game.Id}).");
+                    }
+                    catch (Exception ex)
+                    {
+                        failed++;
+                        Log($"[Desktop] Failed to add '{game.Name}': {ex.Message}");
+                    }
+                }
+            }
+
+            var steamSkipped = selectedAccounts.Count > 0 && !EnsureSteamClosed();
+            if (steamSkipped)
+            {
+                Log("Steam is still running, so no Steam shortcuts were added.");
+                selectedAccounts.Clear();
+            }
 
             foreach (var account in selectedAccounts)
             {
@@ -554,18 +571,51 @@ namespace bnetlauncher_setup
             }
 
             Log(string.Empty);
+            var steamHint = selectedAccounts.Count > 0 ? " Start (or restart) Steam to see them." : string.Empty;
             if (failed > 0)
             {
-                Log("Done, with errors. Start (or restart) Steam to see the shortcuts that did work.");
+                Log("Done, with errors." + steamHint);
                 SetStatus($"{failed} shortcut(s) failed ({added} added, {updated} updated). See the log for details.",
                     isError: true);
             }
-            else
+            else if (steamSkipped)
             {
-                Log("Done. Start (or restart) Steam to see the new shortcuts in your library.");
-                SetStatus($"Done - {added} shortcut(s) added, {updated} updated. Start (or restart) Steam to see them.",
+                SetStatus(addToDesktop
+                        ? $"Desktop shortcuts done ({added} added, {updated} updated). Steam skipped: close Steam and click Install again."
+                        : "bnetlauncher.exe installed, but no Steam shortcuts were added. Close Steam and click Install again.",
                     isError: false);
             }
+            else
+            {
+                Log("Done." + steamHint);
+                SetStatus($"Done - {added} shortcut(s) added, {updated} updated." + steamHint, isError: false);
+            }
+        }
+
+        /// <summary>
+        /// Steam rewrites shortcuts.vdf when it exits, so anything written while it runs would be lost.
+        /// </summary>
+        /// <returns>true if Steam isn't running, either already or after closing it.</returns>
+        private bool EnsureSteamClosed()
+        {
+            if (!SteamLocator.IsSteamRunning())
+            {
+                return true;
+            }
+
+            var result = MessageBox.Show(this,
+                "Steam is currently running. It needs to be closed while shortcuts are added, otherwise it " +
+                "will overwrite these changes when it exits.\n\nClose Steam now?",
+                "Steam is running", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                Log("Closing Steam...");
+                SteamLocator.RequestSteamShutdown(_steamInstallPath);
+                WaitForSteamToExit();
+            }
+
+            return !SteamLocator.IsSteamRunning();
         }
 
         private void WaitForSteamToExit()

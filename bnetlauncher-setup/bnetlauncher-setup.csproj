@@ -49,6 +49,7 @@
     <Compile Include="MainForm.cs" />
     <Compile Include="BinaryVdf.cs" />
     <Compile Include="SteamShortcuts.cs" />
+    <Compile Include="DesktopShortcuts.cs" />
     <Compile Include="SteamLocator.cs" />
     <Compile Include="BattleNetLocator.cs" />
     <Compile Include="Crc32.cs" />
