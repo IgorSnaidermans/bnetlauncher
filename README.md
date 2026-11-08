@@ -2,17 +2,20 @@
 
 Launcher utility to help start battle.net games with the steam overlay.
 
-Official page http://madalien.com/stuff/bnetlauncher/
+[![Build](https://github.com/IgorSnaidermans/bnetlauncher/actions/workflows/bnetlauncher-build.yaml/badge.svg)](https://github.com/IgorSnaidermans/bnetlauncher/actions/workflows/bnetlauncher-build.yaml)
+[![Latest release](https://img.shields.io/github/v/release/IgorSnaidermans/bnetlauncher?include_prereleases)](https://github.com/IgorSnaidermans/bnetlauncher/releases/latest)
 
-## ❗❗ **Project Status** ❗❗
+## This fork
 
-It's now been years since I last played a blizzard game so this project has been put into "maintenance" as
-I'm no longer a user of it.
+This is a maintained fork of [dafzor/bnetlauncher](https://github.com/dafzor/bnetlauncher), whose author
+has put the original into maintenance mode and no longer plays Blizzard games. This fork keeps picking up
+new game/product codes and fixing bugs as they come up.
 
-Contributions are still accepted (new games, features, etc) but other then those no further developments
-will be made.
+* **Download the latest build:** [Releases](https://github.com/IgorSnaidermans/bnetlauncher/releases)
+* **Found a bug or need a game added:** [open an issue](https://github.com/IgorSnaidermans/bnetlauncher/issues)
+* Upstream PRs are also opened when it makes sense, in case the original maintainer wants to merge them back.
 
-There still [other launcher project in active development](https://github.com/search?q=battle.net+steam&type=repositories&s=updated&o=desc) in case bnetlauncher no longer works for you.
+Official page of the original project: http://madalien.com/stuff/bnetlauncher/
 
 ## Purpose
 
@@ -60,6 +63,7 @@ with minimal/no interaction with the battle.net client while still being automat
 |wowclassictitan| World of Warcraft Titan Reforged Classic              |
 |wow_anniversary| World of Warcraft Burning Crusade Anniversary         |
 |wowclassicbeta | World of Warcraft Classic Beta                        |
+|wowforever     | World of Warcraft: Forever                            |
 |wowptr         | World of Warcraft Public Test Realm                   |
 
 the result should look something like the example or screenshot bellow:
