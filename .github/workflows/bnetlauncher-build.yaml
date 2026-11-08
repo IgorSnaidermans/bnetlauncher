@@ -26,6 +26,7 @@ jobs:
       run: |
         copy bnetlauncher\Resources\gamesdb.ini gamesdb.ini.example
         copy bnetlauncher\bin\Release\ILMerge\bnetlauncher.exe bnetlauncher.exe
+        copy bnetlauncher-setup\bin\Release\bnetlauncher-setup.exe bnetlauncher-setup.exe
 
     # - name: Determine Version
     #   run: |
@@ -38,6 +39,7 @@ jobs:
         name: "bnetlauncher"
         path: |
           bnetlauncher.exe
+          bnetlauncher-setup.exe
           README.md
           changelog.txt
           license.txt

@@ -33,6 +33,7 @@ jobs:
       run: |
         copy bnetlauncher\Resources\gamesdb.ini gamesdb.ini.example
         copy bnetlauncher\bin\Release\ILMerge\bnetlauncher.exe bnetlauncher.exe
+        copy bnetlauncher-setup\bin\Release\bnetlauncher-setup.exe bnetlauncher-setup.exe
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
@@ -42,6 +43,7 @@ jobs:
         generate_release_notes: true
         files: |
           bnetlauncher.exe
+          bnetlauncher-setup.exe
           README.md
           changelog.txt
           license.txt
