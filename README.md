@@ -16,9 +16,9 @@ which is already included in Windows 10 version 1803 and newer.
 
 ### With the setup app
 
-1. Download `bnetlauncher.exe` and `bnetlauncher-setup.exe` from the
-   [latest release](https://github.com/IgorSnaidermans/bnetlauncher/releases) into the same folder.
-2. Run `bnetlauncher-setup.exe`.
+1. Download `bnetlauncher-setup.exe` from the [latest release](https://github.com/IgorSnaidermans/bnetlauncher/releases).
+   It already includes `bnetlauncher.exe`.
+2. Run it.
 3. Tick your games and choose where `bnetlauncher.exe` should go.
 4. Under **Create shortcuts**, choose **Steam** and the accounts to add the games to, **Desktop**, or both.
 5. Click **Install**. Steam has to be closed while Steam shortcuts are written, and the setup offers to close it for you.

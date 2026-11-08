@@ -23,8 +23,6 @@ namespace bnetlauncher_setup
         private readonly RadioButton _customFolderRadio = new RadioButton();
         private readonly TextBox _customFolderBox = new TextBox();
         private readonly Button _browseFolderButton = new Button();
-        private readonly TextBox _sourceExeBox = new TextBox();
-        private readonly Button _browseExeButton = new Button();
         private readonly CheckBox _steamCheck = new CheckBox();
         private readonly CheckBox _desktopCheck = new CheckBox();
         private readonly CheckedListBox _accountsList = new CheckedListBox();
@@ -81,7 +79,6 @@ namespace bnetlauncher_setup
             BuildLayout();
             PopulateGames();
             PopulateAccounts();
-            PrefillSourceExe();
         }
 
         private void BuildLayout()
@@ -187,9 +184,8 @@ namespace bnetlauncher_setup
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 1,
-                RowCount = 5,
+                RowCount = 4,
             };
-            column.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             column.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             column.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             column.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -200,7 +196,6 @@ namespace bnetlauncher_setup
             column.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
 
             column.Controls.Add(BuildInstallFolderGroup(), 0, 0);
-            column.Controls.Add(BuildSourceExeGroup(), 0, 1);
 
             var accountsGroup = new GroupBox
             {
@@ -223,9 +218,9 @@ namespace bnetlauncher_setup
             accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
             accountsPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            _steamCheck.Text = "Steam, for these accounts:";
+            _steamCheck.Text = "Steam";
             _steamCheck.AutoSize = true;
-            _steamCheck.CheckedChanged += (s, e) => _accountsList.Enabled = _steamCheck.Checked;
+            _steamCheck.CheckedChanged += (s, e) => _accountsList.Visible = _steamCheck.Checked;
             accountsPanel.Controls.Add(_steamCheck, 0, 0);
             _accountsHint.Dock = DockStyle.Top;
             _accountsHint.AutoSize = true;
@@ -237,20 +232,21 @@ namespace bnetlauncher_setup
             _accountsList.Dock = DockStyle.Top;
             _accountsList.Height = 78;
             _accountsList.CheckOnClick = true;
+            _accountsList.Visible = false;
             accountsPanel.Controls.Add(_accountsList, 0, 2);
             _desktopCheck.Text = "Desktop";
             _desktopCheck.AutoSize = true;
             _desktopCheck.Margin = new Padding(3, 6, 3, 0);
             accountsPanel.Controls.Add(_desktopCheck, 0, 3);
             accountsGroup.Controls.Add(accountsPanel);
-            column.Controls.Add(accountsGroup, 0, 2);
+            column.Controls.Add(accountsGroup, 0, 1);
 
             _installButton.Text = "Install";
             _installButton.AutoSize = true;
             _installButton.Padding = new Padding(8);
             _installButton.Dock = DockStyle.Fill;
             _installButton.Click += InstallButton_Click;
-            column.Controls.Add(_installButton, 0, 3);
+            column.Controls.Add(_installButton, 0, 2);
 
             return column;
         }
@@ -330,51 +326,6 @@ namespace bnetlauncher_setup
             return group;
         }
 
-        private Control BuildSourceExeGroup()
-        {
-            var group = new GroupBox
-            {
-                Text = "Source bnetlauncher.exe",
-                Dock = DockStyle.Top,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                Padding = new Padding(8, 4, 8, 8),
-                Margin = new Padding(0, 8, 0, 0),
-            };
-            var panel = new TableLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoSize = true,
-                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                ColumnCount = 2,
-                RowCount = 1,
-            };
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            panel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-
-            _sourceExeBox.Dock = DockStyle.Fill;
-            _sourceExeBox.Margin = new Padding(3, 4, 3, 4);
-            panel.Controls.Add(_sourceExeBox, 0, 0);
-
-            _browseExeButton.Text = "Browse...";
-            _browseExeButton.AutoSize = true;
-            _browseExeButton.Margin = new Padding(6, 4, 3, 4);
-            _browseExeButton.Click += (s, e) =>
-            {
-                using (var dlg = new OpenFileDialog { Filter = "bnetlauncher.exe|bnetlauncher.exe|All files|*.*" })
-                {
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        _sourceExeBox.Text = dlg.FileName;
-                    }
-                }
-            };
-            panel.Controls.Add(_browseExeButton, 1, 0);
-
-            group.Controls.Add(panel);
-            return group;
-        }
-
         private void PopulateGames()
         {
             foreach (var g in GameDb.LoadBuiltIn().OrderBy(g => g.Name, StringComparer.OrdinalIgnoreCase))
@@ -388,7 +339,6 @@ namespace bnetlauncher_setup
             if (_accounts.Count == 0)
             {
                 _accountsHint.Text = "No Steam accounts were detected on this PC.";
-                _accountsList.Enabled = false;
                 _steamCheck.Enabled = false;
                 _desktopCheck.Checked = true;
                 return;
@@ -403,26 +353,12 @@ namespace bnetlauncher_setup
             }
         }
 
-        private void PrefillSourceExe()
-        {
-            var candidate = Path.Combine(Application.StartupPath, "bnetlauncher.exe");
-            _sourceExeBox.Text = File.Exists(candidate) ? candidate : string.Empty;
-        }
-
         private void InstallButton_Click(object sender, EventArgs e)
         {
             var selectedGames = _gamesList.CheckedItems.Cast<GameEntry>().ToList();
             if (selectedGames.Count == 0)
             {
                 MessageBox.Show(this, "Pick at least one game first.", "Nothing selected",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var sourceExe = _sourceExeBox.Text.Trim();
-            if (string.IsNullOrEmpty(sourceExe) || !File.Exists(sourceExe))
-            {
-                MessageBox.Show(this, "Point to a valid bnetlauncher.exe first.", "Missing bnetlauncher.exe",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
@@ -449,7 +385,7 @@ namespace bnetlauncher_setup
 
             try
             {
-                Install(selectedGames, sourceExe, targetFolder);
+                Install(selectedGames, targetFolder);
             }
             finally
             {
@@ -459,23 +395,24 @@ namespace bnetlauncher_setup
             }
         }
 
-        private void Install(List<GameEntry> selectedGames, string sourceExe, string targetFolder)
+        private static void ExtractLauncher(string targetExe)
+        {
+            using (var resource = typeof(MainForm).Assembly.GetManifestResourceStream("bnetlauncher.exe"))
+            using (var file = File.Create(targetExe))
+            {
+                resource.CopyTo(file);
+            }
+        }
+
+        private void Install(List<GameEntry> selectedGames, string targetFolder)
         {
             string targetExe;
             try
             {
                 Directory.CreateDirectory(targetFolder);
                 targetExe = Path.Combine(targetFolder, "bnetlauncher.exe");
-                // File.Copy onto itself throws, and running the setup from the install folder is normal.
-                if (string.Equals(Path.GetFullPath(sourceExe), Path.GetFullPath(targetExe), StringComparison.OrdinalIgnoreCase))
-                {
-                    Log($"bnetlauncher.exe is already at '{targetExe}'.");
-                }
-                else
-                {
-                    File.Copy(sourceExe, targetExe, overwrite: true);
-                    Log($"Copied bnetlauncher.exe to '{targetExe}'.");
-                }
+                ExtractLauncher(targetExe);
+                Log($"Installed bnetlauncher.exe to '{targetExe}'.");
             }
             catch (UnauthorizedAccessException)
             {
