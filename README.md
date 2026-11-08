@@ -3,8 +3,8 @@
 [![Build](https://github.com/IgorSnaidermans/bnetlauncher/actions/workflows/bnetlauncher-build.yaml/badge.svg)](https://github.com/IgorSnaidermans/bnetlauncher/actions/workflows/bnetlauncher-build.yaml)
 [![Latest release](https://img.shields.io/github/v/release/IgorSnaidermans/bnetlauncher?include_prereleases)](https://github.com/IgorSnaidermans/bnetlauncher/releases/latest)
 
-Start Battle.net games from Steam with the Steam overlay, already logged in and with little or no
-interaction with the Battle.net client.
+Start Battle.net games from Steam with the Steam overlay, or from a regular desktop shortcut, already
+logged in and with little or no interaction with the Battle.net client.
 
 This is a maintained fork of [dafzor/bnetlauncher](https://github.com/dafzor/bnetlauncher), which is in
 maintenance mode. It adds new games, bug fixes and a setup app.
@@ -16,24 +16,32 @@ which is already included in Windows 10 version 1803 and newer.
 
 ### With the setup app
 
-1. Download `bnetlauncher.exe` and `bnetlauncher-setup.exe` from the
-   [latest release](https://github.com/IgorSnaidermans/bnetlauncher/releases) into the same folder.
-2. Run `bnetlauncher-setup.exe`.
-3. Tick your games, choose where `bnetlauncher.exe` should go and which Steam accounts get the shortcuts.
-4. Click **Install**. Steam has to be closed while the shortcuts are written, and the setup offers to close it for you.
-5. Start Steam. The games are in your library as non-Steam shortcuts.
+1. Download `bnetlauncher-setup.exe` from the [latest release](https://github.com/IgorSnaidermans/bnetlauncher/releases).
+   It already includes `bnetlauncher.exe`.
+2. Run it.
+3. Tick your games and choose where `bnetlauncher.exe` should go.
+4. Under **Create shortcuts**, choose **Steam** and the accounts to add the games to, **Desktop**, or both.
+5. Click **Install**. Steam has to be closed while Steam shortcuts are written, and the setup offers to close it for you.
+   Desktop shortcuts don't involve Steam at all.
+6. Start your game from the desktop, or start Steam and find it in your library as a non-Steam shortcut.
 
-Running it again updates existing shortcuts instead of duplicating them. Before changing anything, the setup
-saves your current shortcuts as `shortcuts.vdf.bnetlauncher-setup.bak` next to the original in
-`<Steam>\userdata\<account id>\config\`.
+![The setup app with Steam and Desktop shortcuts selected](docs/setup-app.png)
+
+Steam is optional, but the Steam overlay only works when the game is started from a Steam shortcut. On a PC without
+Steam, the setup app creates desktop shortcuts only:
+
+![The setup app on a PC without Steam, after creating desktop shortcuts](docs/setup-app-desktop.png)
+
+Running it again updates existing shortcuts instead of duplicating them. Before changing Steam's shortcuts, the setup
+saves them as `shortcuts.vdf.bnetlauncher-setup.bak` next to the original in `<Steam>\userdata\<account id>\config\`.
 
 The setup app only lists Battle.net games. Add Epic Games Store titles manually.
 
 ### Manually
 
 1. Put `bnetlauncher.exe` anywhere you like, such as your Steam folder.
-2. Add it to Steam as a non-Steam game.
-3. In the shortcut's properties, set the launch options to a code from the [list below](#supported-games).
+2. Add it to Steam as a non-Steam game, or create a regular Windows shortcut to it.
+3. Add a code from the [list below](#supported-games) to the launch options in Steam, or to the end of the Windows shortcut's target.
 
 The shortcut's target and launch options end up looking like `"G:\Steam\bnetlauncher.exe" ow`.
 

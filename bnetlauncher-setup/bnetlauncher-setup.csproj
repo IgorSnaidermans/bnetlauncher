@@ -49,6 +49,7 @@
     <Compile Include="MainForm.cs" />
     <Compile Include="BinaryVdf.cs" />
     <Compile Include="SteamShortcuts.cs" />
+    <Compile Include="DesktopShortcuts.cs" />
     <Compile Include="SteamLocator.cs" />
     <Compile Include="BattleNetLocator.cs" />
     <Compile Include="Crc32.cs" />
@@ -63,6 +64,18 @@
       <Link>gamesdb.ini</Link>
       <LogicalName>gamesdb.ini</LogicalName>
     </EmbeddedResource>
+    <!-- The launcher ships inside the setup, so people only have to download one file. -->
+    <EmbeddedResource Include="..\bnetlauncher\bin\$(Configuration)\ILMerge\bnetlauncher.exe">
+      <Link>bnetlauncher.exe</Link>
+      <LogicalName>bnetlauncher.exe</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\bnetlauncher\bnetlauncher.csproj">
+      <Project>{5554EC81-62C7-458A-AA33-F1376EAFB4BB}</Project>
+      <Name>bnetlauncher</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
